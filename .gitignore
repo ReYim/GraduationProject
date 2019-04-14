@@ -3,9 +3,6 @@
 
 *.zip
 
-# config files
-*.conf
-*.properties
 
 # logrotate status file
 *.status
