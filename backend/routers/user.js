@@ -5,6 +5,12 @@ const constants = require('../../common/constants');
 const User = require("../models/user")
 const MySQLManager = require('../utils/MySQLManager');
 const jwt = require('../utils/jwt')
+const redis = require('redis')
+//todo start redis client
+client=redis.createClient();
+client.on('ready',(err)=>{
+	console.log('redis is ready!')
+})
 
 
 const AuthProtectRouter = express.Router({
@@ -39,10 +45,13 @@ function login(req, res){
 		//todo 判断用户密码
 		if(user!= null && user.password == password) {
 			userJson = user.toJSON()
-			res.json({
-				code: constants.RetCode.SUCCESS,
-        userWeight: userJson.weight,
-				token: jwt.getToken(username, userJson.weight),
+			jwt.setUserToken(account,user.weight)
+			client.get(account,(err,reply)=>{
+				res.json({
+					ret: constants.RetCode.SUCCESS,
+					userWeight: userJson.weight,
+					userToken: reply,
+				})
 			})
 		} else {
 			res.json({
