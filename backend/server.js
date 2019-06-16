@@ -17,25 +17,25 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-// Pug template. Reference http://expressjs.com/en/guide/using-template-engines.html
-app.set('view engine', 'pug');
-app.set('views', baseAbsPath + './pugs');
 
+
+app.use("*", (req, res, next) => {
+	console.log(req.baseUrl);
+	next()
+})
 /*------------------------*/
 
 const User = require('./routers/user');
 
 //---User router begins.---
-
-// User pages.
-app.use(constants.ROUTE_PATHS.PLAYER + constants.ROUTE_PATHS.PAGE,
-	User.PageRouter);
-
 // User non-page apis.
-app.use(constants.ROUTE_PATHS.PLAYER + constants.ROUTE_PATHS.API,
-	//TODO 验证用户身份的 User.TokenAuth,
+//TODO admin
+app.use(constants.ROUTE_PATHS.API + constants.ROUTE_PATHS.USER,
+	User.TokenAuth,
 	User.AuthProtectRouter);
 
+//TODO teache
+//TODO student
 //---User router ends.---
 
 const port = 9099;
@@ -44,5 +44,5 @@ http.listen(port, function() {
 })
 
 process.on('uncaughtException', (err) => {
-  logger.error(err.stack);
+  console.log(err.stack);
 });

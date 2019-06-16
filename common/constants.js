@@ -6,9 +6,9 @@ const RetCode = {
 exports.RetCode = RetCode;
 
 const ROUTE_PATHS = {
-	PLAYER: "/player",
+	USER: "/user",
 	PAGE: "/page",
-	API : "/api",
+	API : "/dev-api",
 }
 
 exports.ROUTE_PATHS = ROUTE_PATHS;
