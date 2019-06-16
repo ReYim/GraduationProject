@@ -1,15 +1,15 @@
 const RetCode = {
-	SUCCESS: 1000
+	SUCCESS: 1000,
+	//大于1000的都是错误码
+	PASSWORD_ERROR: 1001,
 }
 exports.RetCode = RetCode;
 
 const ROUTE_PATHS = {
-	PLAYER: "/player"
-	PAGE: "/page"
+	PLAYER: "/player",
+	PAGE: "/page",
+	API : "/api",
 }
+
 exports.ROUTE_PATHS = ROUTE_PATHS;
 
-const ROUTE_PARAMS = {
-	API_VER: "/:version"
-}
-exports.ROUTE_PATHS = ROUTE_PARAMS;

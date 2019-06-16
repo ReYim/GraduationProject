@@ -3,49 +3,34 @@ const Sequelize = require('sequelize');
 const constants = require('../../common/constants');
 const config = require('../configs/mysql.conf.json');
 
-class MySQLManager {
-  constructor() {
-    const instance = this;
+let MySQLManager = connectToMysql();
 
-    this.dbRef = null;
-    this.host = null;
-    this.port = null;
-    this.dbname = null;
+function connectToMysql() {
+	let host = config.host;
+	let port = config.port;
+	let dbname = config.dbname;
+	let username = config.username;
+	let password = config.password;
 
-    this.username = null;
-    this.password = null;
-
-    this.testConnectionAsync = this.testConnectionAsync.bind(this);
-
-    try {
-      this.host = config.host;
-      this.port = config.port;
-      this.dbname = config.dbname;
-
-      this.username = config.username;
-      this.password = config.password;
-
-      this.locationAndIdentity = instance.host + ":" + instance.port + "/" + this.dbname;
-
-      this.dbRef = new Sequelize(instance.dbname, instance.username, instance.password, {
-        host: instance.host,
-        port: instance.port,
-        dialect: 'mysql',
-        pool: {
-          max: 5,
-          min: 0,
-          idle: 10000
-        }
-      });
-    } catch (e) {
-      // TODO	
-    }
-  }
-
-  testConnectionAsync() {
-    const instance = this;
-    return instance.dbRef.authenticate();
-  }
+	try {
+		let dbRef = new Sequelize(dbname, username, password, {
+			host: host,
+			port: port,
+			dialect: 'mysql',
+			pool: {
+				max: 5,
+				min: 0,
+				idle: 10000
+			}
+		});
+		console.log("connect mysql success");
+		//初始化数据表
+		dbRef.sync()
+		return dbRef
+	} catch(e) {
+		console.log(e)
+	}
 }
+
 
 module.exports = MySQLManager;

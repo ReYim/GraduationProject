@@ -23,31 +23,25 @@ app.set('views', baseAbsPath + './pugs');
 
 /*------------------------*/
 
-MySQLManager.instance.testConnectionAsync()
-.then(() => {
-  console.log("[COMPLETE] Connects to MySQL server %s.", MySQLManager.instance.locationAndIdentity);
+const User = require('./routers/user');
+
+//---User router begins.---
+
+// User pages.
+app.use(constants.ROUTE_PATHS.PLAYER + constants.ROUTE_PATHS.PAGE,
+	User.PageRouter);
+
+// User non-page apis.
+app.use(constants.ROUTE_PATHS.PLAYER + constants.ROUTE_PATHS.API,
+	//TODO 验证用户身份的 User.TokenAuth,
+	User.AuthProtectRouter);
+
+//---User router ends.---
+
+const port = 9099;
+http.listen(port, function() {
+	console.log("server start at" + port)
 })
-.then(() => {
-  const User = require('./routers/user');
-
-  //---User router begins.---
-  
-  // User pages.
-  app.use(constants.ROUTE_PATHS.PLAYER + constants.ROUTE_PATHS.PAGE,
-    User.PageRouter);
-
-  // User non-page apis.
-  /*app.use(constants.ROUTE_PATHS.PLAYER + constants.ROUTE_PARAMS.API_VER,
-    //TODO 验证用户身份的 User.TokenAuth,
-    User.AuthProtectedApiRouter);
-		*/
-
-  //---User router ends.---
-
-  const port = 9099;
-  http.listen(port, function() {
-  });
-});
 
 process.on('uncaughtException', (err) => {
   logger.error(err.stack);
