@@ -32,5 +32,4 @@ function connectToMysql() {
 	}
 }
 
-
 module.exports = MySQLManager;

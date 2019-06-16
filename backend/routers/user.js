@@ -4,31 +4,39 @@ const Promise = require('bluebird');
 const constants = require('../../common/constants');
 const User = require("../models/user")
 const MySQLManager = require('../utils/MySQLManager');
+const jwt = require('../utils/jwt')
 
 
 const AuthProtectRouter = express.Router({
 	mergeParams: true
-})
+});
 
-AuthProtectRouter.get("/login", login)
+AuthProtectRouter.post("/login", login);
+AuthProtectRouter.get("/sign", sign);
+
+function sign(req, res) {
+	//TODO
+}
 
 function login(req, res){
-  const account = req.body.account;
+	const account = req.body.account;
 	const password = req.body.password;
 
 	//TODO 判断前端发送的帐号号和密码是否为空
 	
 	User.findOne({
 		  where:{
-				username: 'janedoe',
+				username: account,
 			}
 	})
 	.then(user => {
-		//TODO 判断用户密码
-		if(user.password == password) {
+		//todo 判断用户密码
+		if(user!= null && user.password == password) {
+			userjson = user.tojson()
 			res.json({
 				ret: constants.RetCode.SUCCESS,
-				name: user.toJSON(),
+                userWeight: userJson.weight,
+				userToken: jwt.getToken(account,userJson.weight),
 			})
 		} else {
 			res.json({
