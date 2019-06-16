@@ -45,12 +45,11 @@ function login(req, res){
 		//todo 判断用户密码
 		if(user!= null && user.password == password) {
 			userJson = user.toJSON()
-			jwt.setUserToken(account,user.weight)
-			client.get(account,(err,reply)=>{
+			jwt.setUserToken(username, user.weight)
+			client.get(username, (err,reply)=>{
 				res.json({
-					ret: constants.RetCode.SUCCESS,
-					userWeight: userJson.weight,
-					userToken: reply,
+					code: constants.RetCode.SUCCESS,
+					token: reply,
 				})
 			})
 		} else {
@@ -89,4 +88,5 @@ function TokenAuth(req, res, next) {
 module.exports = {
 	PageRouter,
 	AuthProtectRouter,
+	TokenAuth,
 }
