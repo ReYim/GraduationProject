@@ -29,7 +29,7 @@ function login(req, res){
 	const password = req.body.password;
 
 	//TODO 判断前端发送的帐号号和密码是否为空
-	
+    var userJson
 	User.findOne({
 		  where:{
 				username: account,
@@ -41,6 +41,12 @@ function login(req, res){
 			userJson = user.toJSON()
 			jwt.setUserToken(account,user.weight)
 			client.get(account,(err,reply)=>{
+			    if(err){
+			        console.log("redis error ! cannot get the json web token from redis!")
+                        res.json({
+                            ret:constants.RetCode.REDIS_ERROR,
+                        })
+                }
 				res.json({
 					ret: constants.RetCode.SUCCESS,
 					userWeight: userJson.weight,

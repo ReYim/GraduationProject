@@ -43,6 +43,7 @@ http.listen(port, function() {
 	console.log("server start at" + port)
 })
 
-process.on('uncaughtException', (err) => {
+/*process.on('uncaughtException', (err) => {
   logger.error(err.stack);
 });
+*/
