@@ -57,11 +57,12 @@ function login(req, res){
 					res.json({
 						code:constants.RetCode.REDIS_ERROR,
 					})
+				} else {
+					res.json({
+						code: constants.RetCode.SUCCESS,
+						token: reply,
+					})
 				}
-				res.json({
-					code: constants.RetCode.SUCCESS,
-					token: reply,
-				})
 			})
 		} else {
 			res.json({
