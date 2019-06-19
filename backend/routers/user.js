@@ -74,7 +74,6 @@ function add_student(req,res) {
 				})
 			});
 	}
-
 }
 
 function login(req, res){
