@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const redis = require('redis')
 
 const two_days = 172800
+const test_time = 3
 
 const getToken = (username , userweight) =>{
     return jwt.sign({ name: username , weight: userweight }, 'shhhhh');
@@ -12,6 +13,11 @@ const setUserToken = (username , userweight) =>{
     client.set(username,getToken(username,userweight),'EX',two_days,function () {
     })
 }
+
+const getWeightByToken = token =>{
+
+}
+
 
 
 

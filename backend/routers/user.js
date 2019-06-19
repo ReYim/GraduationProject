@@ -6,6 +6,7 @@ const User = require("../models/user")
 const MySQLManager = require('../utils/MySQLManager');
 const jwt = require('../utils/jwt')
 const redis = require('redis')
+
 //todo start redis client
 client=redis.createClient();
 client.on('ready',(err)=>{
@@ -18,8 +19,27 @@ const AuthProtectRouter = express.Router({
 });
 
 AuthProtectRouter.post("/login", login);  //handle login request
+AuthProtectRouter.post("/add-student", add_student);  //handle login request
+AuthProtectRouter.post("/logout", logout);  //handle login request
 AuthProtectRouter.get("/info", getInfo);
 
+function logout(req,res) {
+	console.log(req.body)
+	//console.log(req.body.username)
+	client.del("admin",(err,reply)=>{    //TODO 这里要根据TOKEN注销用户，从REDIS删除
+		if(err){
+			console.log(err)
+		}
+		else{
+			console.log("success!")
+			res.json({
+				code:constants.RetCode.SUCCESS,
+			})
+
+		}
+
+	})
+}
 
 function getInfo(req, res) {
 	res.json({
@@ -27,6 +47,34 @@ function getInfo(req, res) {
 		avatar: "a",
 		code: constants.RetCode.SUCCESS
 	})
+}
+
+function add_student(req,res) {
+	console.log(req.body)
+	console.log("add_student reciev a request")
+	const username = req.body.username;
+	const password = req.body.password;
+	const token = req.body.token;
+	//TODO if receive null info  sent a code:NULL_INFO_ERROR
+	if(username==="" || password==="" || token===""){
+		res.json({
+			code:constants.RetCode.NULL_INFO_ERROR,
+		})
+	}
+	else{
+	User.create({
+			username:username,
+			password:password,
+			weight: 3,
+		})
+			.then((admin, err) => {
+				console.log("create super admin success")
+				res.json({
+					code:constants.RetCode.SUCCESS,
+				})
+			});
+	}
+
 }
 
 function login(req, res){
@@ -39,9 +87,7 @@ function login(req, res){
 		res.json({
              code:constants.RetCode.NULL_INFO_ERROR,
 		})
-		res.end()
 	}
-
 	User.findOne({
 		  where:{
 				username: username,
@@ -58,10 +104,12 @@ function login(req, res){
 						code:constants.RetCode.REDIS_ERROR,
 					})
 				}
-				res.json({
-					code: constants.RetCode.SUCCESS,
-					token: reply,
-				})
+				else{
+					res.json({
+						code: constants.RetCode.SUCCESS,
+						token: reply,
+					})
+				}
 			})
 		} else {
 			res.json({
