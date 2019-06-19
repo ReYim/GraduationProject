@@ -8,6 +8,15 @@ export function login(data) {
   })
 }
 
+//添加学生用户的权限
+export function add_sdutent(token) {
+  return request({
+    url: '/user/add-student',
+    method: 'get',
+    params: { token }
+  })
+}
+
 export function getInfo(token) {
   return request({
     url: '/user/info',
@@ -16,9 +25,10 @@ export function getInfo(token) {
   })
 }
 
-export function logout() {
+export function logout(data) {
   return request({
     url: '/user/logout',
-    method: 'post'
+    method: 'post',
+    data
   })
 }
