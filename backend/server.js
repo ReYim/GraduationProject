@@ -30,6 +30,9 @@ const User = require('./routers/user');
 //---User router begins.---
 // User non-page apis.
 //TODO admin
+app.use(constants.ROUTE_PATHS.API + constants.ROUTE_PATHS.USER + '/login',
+	User.login);
+
 app.use(constants.ROUTE_PATHS.API + constants.ROUTE_PATHS.USER,
 	User.TokenAuth,
 	User.AuthProtectRouter);

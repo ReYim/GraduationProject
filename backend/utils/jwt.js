@@ -1,34 +1,34 @@
 const jwt = require('jsonwebtoken');
 const redis = require('redis')
+const KEY = require('./common')
 
 const two_days = 172800
 const test_time = 3
 
 const getToken = (username , userweight) =>{
-    return jwt.sign({ name: username , weight: userweight }, 'shhhhh');
+    //return jwt.sign({ name: username , weight: userweight }, 'shhhhh');
+    return jwt.sign({
+        exp: Math.floor(Date.now() / 1000) + (60 * 60),
+        data: {username: username , weight: userweight}
+    },KEY );
 }
+
 
 
 const setUserToken = (username , userweight) =>{
-    client.set(username,getToken(username,userweight),'EX',two_days,function () {
+    return new Promise((resolve, reject) => {
+        client.set(username,getToken(username,userweight),'EX',two_days,function (err) {
+           if(err == null) {
+               resolve()
+           } else {
+               reject(err)
+           }
+        })
     })
-}
-
-const getWeightByToken = token =>{
-
-}
+};
 
 
 
-
-/*
-
-//console.log(client.get("admin",(err,reply)=>{ return reply}))
- const a =client.get('admin',(err,reply)=>{
- console.log(reply)
-
- })
-*/
 const get_token = username => {
     return new Promise((resolve, reject) => {
         client.get(username,(err, reply) => {
@@ -40,14 +40,8 @@ const get_token = username => {
         });
     });
 };
-client=redis.createClient();
-client.on('ready',(err)=>{
-    console.log('redis is ready!')
-})
 
-get_token('admin').then(val => {
 
-})
 
 
 
