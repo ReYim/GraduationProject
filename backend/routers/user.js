@@ -3,6 +3,7 @@ const express = require('express');
 const Promise = require('bluebird');
 const constants = require('../../common/constants');
 const User = require("../models/user")
+const Test = require("../models/test/test")
 const MySQLManager = require('../utils/MySQLManager');
 const jwt = require('../utils/jwt')
 const redis = require('redis')
@@ -25,8 +26,8 @@ AuthProtectRouter.get("/info", getInfo);
 
 function logout(req,res) {
 	console.log(req.body)
-	//console.log(req.body.username)
-	client.del("admin",(err,reply)=>{    //TODO 这里要根据TOKEN注销用户，从REDIS删除
+
+	client.del("admin",(err)=>{    //TODO 这里要根据TOKEN注销用户，从REDIS删除
 		if(err){
 			console.log(err)
 		}
@@ -60,19 +61,27 @@ function add_student(req,res) {
 		res.json({
 			code:constants.RetCode.NULL_INFO_ERROR,
 		})
-	}
-	else{
+	} else{
 	User.create({
 			username:username,
 			password:password,
 			weight: 3,
-		})
-			.then((admin, err) => {
-				console.log("create super admin success")
-				res.json({
-					code:constants.RetCode.SUCCESS,
+		}).then((admin, err) => {
+			console.log(admin.toJSON().id);
+			    id = admin.toJSON().id
+				Test.create({
+					username:username,
+					userId: id,
+				}).then( user => {
+					res.json({
+						code: constants.RetCode.SUCCESS,
+					})
+					console.log("add success!")
 				})
-			});
+			})
+		.catch(err => {
+			console.log("err", err)
+		})
 	}
 }
 
@@ -87,6 +96,7 @@ function login(req, res){
              code:constants.RetCode.NULL_INFO_ERROR,
 		})
 	}
+	var userJson ;
 	User.findOne({
 		  where:{
 				username: username,
