@@ -1,14 +1,13 @@
-const baseAbsPath = __dirname + '/';
+
 const express = require('express');
-const Promise = require('bluebird');
 const constants = require('../../common/constants');
 const User = require("../models/user")
 const Test = require("../models/test/test")
-const MySQLManager = require('../utils/MySQLManager');
-const jwt = require('../utils/jwt')
 const KEY = require('../utils/common')
 const redis = require('redis')
-var jsonwebtoken = require('jsonwebtoken');
+const jsonwebtoken = require('jsonwebtoken');
+const LOGIN =require('./login_logout/login')
+const LOGOUT =require('./login_logout/logout')
 
 //todo start redis client
 client=redis.createClient();
@@ -29,22 +28,7 @@ AuthProtectRouter.post("/add-student", add_student);  //handle login request
 AuthProtectRouter.post("/logout", logout);  //handle login request
 AuthProtectRouter.get("/info", getInfo);
 
-function logout(req,res) {
-    let username = req.body.username;
-	client.del(username,(err)=>{    //这里要根据TOKEN注销用户，从REDIS删除
-		if(err){
-			console.log(err)
-			res.json({
-				code:constants.RetCode.REDIS_ERROR,
-			})
-		} else{
-			console.log("success!")
-			res.json({
-				code:constants.RetCode.SUCCESS,
-			})
-		}
-	})
-}
+
 
 function getInfo(req, res) {
 	res.json({
@@ -90,55 +74,12 @@ function add_student(req,res) {
 }
 
 function login(req, res){
-	console.log(req.body)
-	const username = req.body.username;
-	const password = req.body.password;
-
-	//TODO 判断前端发送的帐号号和密码是否为空
-	if(username==='' || password===''){
-		return res.json({
-             code:constants.RetCode.NULL_INFO_ERROR,
-		})
-	}
-	User.findOne({
-      where:{
-            username: username,
-        }
-	})
-	.then(user => {
-		//判断用户密码
-		if(user!= null && user.password == password) {
-			let userJson = user.toJSON()
-			jwt.setUserToken(username, user.weight)
-            .then(() => {
-				client.get(username, (err,reply)=>{
-					if(err){   //todo 如果从REDIS获取jwt失败就响应错误码
-						res.json({
-							code:constants.RetCode.REDIS_ERROR,
-						})
-					}
-					else{
-						res.json({
-							code: constants.RetCode.SUCCESS,
-							token: reply,
-						})
-					}
-				})
-            }).catch(err => {
-				console.log(err)
-				res.json({
-					code: -11111,
-				})
-			});
-		} else {
-			res.json({
-				code: constants.RetCode.PASSWORD_ERROR,
-			})
-		}
-	 });
+ LOGIN.login(req,res);
 }
 
-
+function logout(req,res) {
+	LOGOUT.logout(req,res);
+}
 
 function spaRender(req, res) {
 	const xBundleUri = '/bin/player.zh_ch.bundle.js';
