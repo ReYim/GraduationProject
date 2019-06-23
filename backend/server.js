@@ -30,6 +30,9 @@ const User = require('./routers/user');
 //---User router begins.---
 // User non-page apis.
 //TODO admin
+app.use(constants.ROUTE_PATHS.API + constants.ROUTE_PATHS.USER + '/login',
+	User.login);
+
 app.use(constants.ROUTE_PATHS.API + constants.ROUTE_PATHS.USER,
 	User.TokenAuth,
 	User.AuthProtectRouter);
@@ -43,12 +46,6 @@ http.listen(port, function() {
 	console.log("server start at" + port)
 })
 
-<<<<<<< HEAD
-/*process.on('uncaughtException', (err) => {
-  logger.error(err.stack);
-=======
 process.on('uncaughtException', (err) => {
   console.log(err.stack);
->>>>>>> 940878e5f821259828ea809932c287ab81907671
 });
-*/
