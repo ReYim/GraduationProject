@@ -8,7 +8,6 @@ export function login(data) {
   })
 }
 
-//添加学生用户的权限
 export function add_sdutent(token) {
   return request({
     url: '/user/add-student',

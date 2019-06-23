@@ -1,6 +1,7 @@
 import { login, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
+import Cookies from 'js-cookie'
 
 const state = {
   token: getToken(),
@@ -27,8 +28,25 @@ const actions = {
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password }).then(response => {
         const { data } = response
+        Cookies.set('Token', response.data.token)
         commit('SET_TOKEN', data.token)
         setToken(data.token)
+        resolve()
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
+  // user logout
+  logout({ commit }) {
+    return new Promise((resolve, reject) => {
+      logout({ token: state.token }).then(response => {
+        const { data } = response
+        console.log(data)
+        commit('SET_TOKEN', data.token)
+        removeToken()
+        resetRouter()
         resolve()
       }).catch(error => {
         reject(error)
@@ -62,7 +80,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         const { data } = response
-
+        console.log(data)
         if (!data) {
           reject('Verification failed, please Login again.')
         }
@@ -72,21 +90,6 @@ const actions = {
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
         resolve(data)
-      }).catch(error => {
-        reject(error)
-      })
-    })
-  },
-
-  // user logout
-  logout({ commit, state }) {
-    return new Promise((resolve, reject) => {
-      logout(state.token).then(response => {
-        const { data } = response
-        commit('SET_TOKEN', data.token)
-        removeToken()
-        resetRouter()
-        resolve()
       }).catch(error => {
         reject(error)
       })

@@ -75,19 +75,10 @@ export default [
     url: '/user/logout',
     type: 'post',
     response: config => {
-      const { username } = config.body
-      const token = tokens[username]
-
-      if (!token) {
-        return {
-          code: 60204,
-          message: 'Account and password are incorrect.'
-        }
-      }
-
+      const { code } = config.body
+      //const token = tokens[username]
       return {
-        code: 20000,
-        data: token
+        code: 1000,
       }
     }
   }
