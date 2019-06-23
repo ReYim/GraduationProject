@@ -18,21 +18,27 @@ const AuthProtectRouter = express.Router({
 });
 
 AuthProtectRouter.post("/login", login);
-AuthProtectRouter.get("/sign", sign);
+AuthProtectRouter.get("/info", getInfo);
 
-function sign(req, res) {
-	//TODO
+
+function getInfo(req, res) {
+	res.json({
+		name: "admin",
+		avatar: "a",
+		code: constants.RetCode.SUCCESS
+	})
 }
 
 function login(req, res){
-	const account = req.body.account;
+	console.log(req.body)
+	const username = req.body.username;
 	const password = req.body.password;
 
 	//TODO 判断前端发送的帐号号和密码是否为空
     var userJson
 	User.findOne({
 		  where:{
-				username: account,
+				username: username,
 			}
 	})
 	.then(user => {
@@ -48,14 +54,13 @@ function login(req, res){
                         })
                 }
 				res.json({
-					ret: constants.RetCode.SUCCESS,
-					userWeight: userJson.weight,
-					userToken: reply,
+					code: constants.RetCode.SUCCESS,
+					token: reply,
 				})
 			})
 		} else {
 			res.json({
-				ret: constants.RetCode.PASSWORD_ERROR,
+				code: constants.RetCode.PASSWORD_ERROR,
 			})
 		}
 	 });
@@ -75,7 +80,19 @@ function spaRender(req, res) {
 	res.render('index', paramDict);
 }
 
+function TokenAuth(req, res, next) {
+	token = req.body.token || req.query.token;
+	//TODO 验证
+	/* 
+	 * pase := getWeight(0, token) //返true||false
+	 *
+	 *
+	 * */
+	next()
+}
+
 module.exports = {
 	PageRouter,
 	AuthProtectRouter,
+	TokenAuth,
 }

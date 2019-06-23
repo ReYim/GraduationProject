@@ -16,8 +16,9 @@ const User = MySQLManager.define('user', {
 	.then((admin, err) => {
 		console.log("create super admin success")
 	});
-*/
 
+
+	*/
 
 
 module.exports = User;
