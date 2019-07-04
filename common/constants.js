@@ -7,6 +7,7 @@ const RetCode = {
 	LOGOUT_ERROR:1004,     //注销失败
 	NOT_FOUND_TOKEN: -1112 , //只能执行一次注销,
 	UNKNOWN_ERROR:-11112 ,   //TOKEN解析失败
+	USER_EXIST:1005,         //添加的用户已存在
 }
 exports.RetCode = RetCode;
 

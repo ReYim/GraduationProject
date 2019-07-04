@@ -43,12 +43,6 @@ const get_token = username => {
 
 
 
-
-
-
-
-
-
 //TODO 暴露方法
 module.exports.setUserToken=setUserToken
 

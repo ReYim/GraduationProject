@@ -39,36 +39,49 @@ function getInfo(req, res) {
 }
 
 function add_student(req,res) {
-	console.log(req.body)
-	console.log("add_student reciev a request")
-	const username = req.body.username;
-	const password = req.body.password;
-	const token = req.body.token;
+	const studentname = req.body.studentname;
+	const studentpass = req.body.studentpass;
 	//TODO if receive null info  sent a code:NULL_INFO_ERROR, null, "", nonNumber, undefind
-	if(username==="" || password==="" || token===""){
+	if(studentname==="" || studentpass==="" ){
 		res.json({
 			code:constants.RetCode.NULL_INFO_ERROR,
 		})
 	} else{
-		User.create({
-			username:username,
-			password:password,
-			weight: 3,
-		}).then((admin, err) => {
-			console.log(admin.toJSON().id);
-			    id = admin.toJSON().id
-				Test.create({
-					username:username,
-					userId: id,
-				}).then( user => {
-					res.json({
-						code: constants.RetCode.SUCCESS,
-					})
-					console.log("add success!")
+		User.findOne({
+			where:{
+				username: studentname,
+			}
+		}).then(user => {
+			if (user === null) {   //如果不存在这个用户就直接加入
+				console.log("user is null");
+				User.create({                    //创建用户账户
+					username: studentname,
+					password: studentpass,
+					weight: 3,
 				})
-			})
-		.catch(err => {
-			console.log("err", err)
+					.then((admin, err) => {
+					console.log(admin.toJSON().id);
+					id = admin.toJSON().id
+					Test.create({                        //创建用户学籍表
+						username: studentname,
+						userId: id,
+					})
+						.then(user => {
+						res.json({
+							code: constants.RetCode.SUCCESS,
+						})
+						console.log("add success!")
+					})
+				})
+					.catch(err => {
+						console.log("err", err)
+					})
+
+			} else {  //如果存在就返回错误码
+				res.json({
+					code: constants.RetCode.USER_EXIST,
+				})
+			}
 		})
 	}
 }
