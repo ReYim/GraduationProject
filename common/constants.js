@@ -15,6 +15,7 @@ const ROUTE_PATHS = {
 	USER: "/user",
 	PAGE: "/page",
 	API : "/dev-api",
+	ADMIN:"/admin",
 }
 
 exports.ROUTE_PATHS = ROUTE_PATHS;

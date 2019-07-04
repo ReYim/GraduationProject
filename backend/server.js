@@ -31,15 +31,15 @@ const User = require('./routers/user');
 // User non-page apis.
 //TODO admin
 //登陆的路由
-app.use(constants.ROUTE_PATHS.API + constants.ROUTE_PATHS.USER + '/login',
+app.use(constants.ROUTE_PATHS.API + constants.ROUTE_PATHS.ADMIN + '/login',
 	User.login);
-
 //其它操作的路由，都需要验证token
-app.use(constants.ROUTE_PATHS.API + constants.ROUTE_PATHS.USER,
+app.use(constants.ROUTE_PATHS.API + constants.ROUTE_PATHS.ADMIN,
 	User.TokenAuth,
 	User.AuthProtectRouter);
 
 //TODO teache
+
 //TODO student
 //---User router ends.---
 

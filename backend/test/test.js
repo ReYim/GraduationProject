@@ -1,25 +1,28 @@
-var jwt = require('jsonwebtoken');
-var token = jwt.sign({ username: 'mardan',weight:'123' }, 'shhhhh');
-console.log(token);
+
+const express = require('express');
+const constants = require('../../common/constants');
+const User = require("../models/user")
+const Test = require("../models/test/test")
 
 
-/*
-var username ="mardan"
-var userweight = "1"
-const token1 = jwt.sign({
-    exp: Math.floor(Date.now() / 1000) + (1),
-    data: {name: username , weight: userweight}
-}, '#&*(&(*jfsfj77888****a');
-
-console.log(token1)
-*/
-
-const key = "#&*(&(*jfsfj77888****a";
-const token2 = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NjEyODIwODQsImRhdGEiOnsibmFtZSI6Im1hcmRhbiIsIndlaWdodCI6IjEifSwiaWF0IjoxNTYxMjgyMDgzfQ.Z8tnntyk9Mfj6x4MQL28Mxo9rHHIFWoLIph8XnPtkpI\n";
-
-jwt.verify(token2, key, (err, decodeInfo) => {
-
-});
-
-
-
+const userId = 5;
+const  sex=1;
+const  name ='abliz'
+//const update_test = { name : 'alim'};
+const  updataValues = {
+    name: name,
+    sex: sex,
+}
+Test.update( updataValues,{
+        where:{
+            userId: userId,
+        }
+}).then((result)=>{
+    console.log("update result :")
+    console.log(result);
+    if(result==1){
+        console.log("update success!")
+    }else{
+        console.log("update faild!")
+    }
+})

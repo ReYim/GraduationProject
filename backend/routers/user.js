@@ -3,12 +3,14 @@ const express = require('express');
 const constants = require('../../common/constants');
 const User = require("../models/user")
 const Test = require("../models/test/test")
+const Information = require("../models/information/information")
 const KEY = require('../utils/common')
 const redis = require('redis')
 const jsonwebtoken = require('jsonwebtoken');
 const LOGIN =require('./login_logout/login')
 const LOGOUT =require('./login_logout/logout')
 const Add_Student = require('./add_del_student/add_student')
+const Update = require('./add_del_student/update')
 
 //todo start redis client
 client=redis.createClient();
@@ -28,7 +30,7 @@ const AuthProtectRouter = express.Router({
 AuthProtectRouter.post("/add-student", add_student);  //handle login request
 AuthProtectRouter.post("/logout", logout);  //handle login request
 AuthProtectRouter.get("/info", getInfo);
-
+AuthProtectRouter.post("/update",update)
 
 
 function getInfo(req, res) {
@@ -39,7 +41,12 @@ function getInfo(req, res) {
 	})
 }
 
-function add_student(req,res){	Add_Student.add_student(req,res);	}
+
+function update(req,res) {	Update.update_test(req,res)	}    //测试编辑数据
+//function update(req,res) {	Update.update(req,res)	}    //正式编辑数据
+
+function add_student(req,res){	Add_Student.add_student_test(req,res);	}    //测试添加学生
+//function add_student(req,res){	Add_Student.add_student(req,res);	}    //正式添加学生
 
 function login(req, res){	LOGIN.login(req,res);	}
 

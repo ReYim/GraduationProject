@@ -11,9 +11,6 @@ const User = MySQLManager.define('user', {
 });
 
 
-
-
-
 //默认管理员密码
 
 // User.create({
