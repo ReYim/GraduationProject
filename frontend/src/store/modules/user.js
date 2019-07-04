@@ -1,4 +1,4 @@
-import { login, logout, getInfo } from '@/api/user'
+import { login, logout, getInfo, add_student } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 import Cookies from 'js-cookie'
@@ -54,22 +54,20 @@ const actions = {
     })
   },
 
-  // get add-student
-  add_student({ commit, state }) {
+  // user add_student
+  add_student({ commit }, userInfo) {
+    const { studentname, studentpass } = userInfo
+    console.log('＋＋＋' + userInfo)
     return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
+      add_student({ studentname: studentname.trim(), studentpass: studentpass, token: state.token}).then(response => {
+        console.log('=-----' + response)
         const { data } = response
-
-        if (!data) {
-          reject('Verification failed, please Login again.')
-        }
-
-        const { name, avatar } = data
-
-        commit('SET_NAME', name)
-        commit('SET_AVATAR', avatar)
-        resolve(data)
+        commit('SET_TOKEN', data.token)
+        setToken(data.token)
+        console.log(data)
+        resolve()
       }).catch(error => {
+        console.log(error)
         reject(error)
       })
     })

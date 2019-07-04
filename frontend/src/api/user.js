@@ -8,11 +8,11 @@ export function login(data) {
   })
 }
 
-export function add_sdutent(token) {
+export function add_student(data) {
   return request({
     url: '/user/add-student',
-    method: 'get',
-    params: { token }
+    method: 'post',
+    data
   })
 }
 
