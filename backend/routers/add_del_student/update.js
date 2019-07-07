@@ -1,31 +1,8 @@
 const constants = require('../../../common/constants');
 const Test = require("../../models/test/test")
-const Information = require("../../models/information/information")
+const Information = require("../../models/information")
 
-function update_test(req,res) {
-    const userId = req.body.userId;
-    const  updataValues = {
-        name: req.body.name,
-        sex : req.body.sex,
-    }
-    Test.update( updataValues,{
-        where:{
-            userId: userId,
-        }
-    }).then((result)=>{
-        console.log("update result :")
-        console.log(result);
-        if(result==1){
-            res.json({
-                code: constants.RetCode.SUCCESS,
-            })
-        }else{
-            res.json({
-                code: constants.RetCode.UNKNOWN_ERROR,
-            })
-        }
-    })
-}
+
 
 function update(req,res){
     const userId = req.body.userId;

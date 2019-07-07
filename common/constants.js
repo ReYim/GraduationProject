@@ -16,6 +16,7 @@ const ROUTE_PATHS = {
 	PAGE: "/page",
 	API : "/dev-api",
 	ADMIN:"/admin",
+	STUDENT:'/student'
 }
 
 exports.ROUTE_PATHS = ROUTE_PATHS;

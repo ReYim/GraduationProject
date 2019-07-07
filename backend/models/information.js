@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const MySQLManager = require('../../utils/MySQLManager');
+const MySQLManager = require('../utils/MySQLManager');
 
 const Information = MySQLManager.define('information',{
     userId: Sequelize.INTEGER,

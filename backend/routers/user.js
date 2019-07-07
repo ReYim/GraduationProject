@@ -1,9 +1,6 @@
 
 const express = require('express');
 const constants = require('../../common/constants');
-const User = require("../models/user")
-const Test = require("../models/test/test")
-const Information = require("../models/information/information")
 const KEY = require('../utils/common')
 const redis = require('redis')
 const jsonwebtoken = require('jsonwebtoken');
@@ -42,11 +39,10 @@ function getInfo(req, res) {
 }
 
 
-function update(req,res) {	Update.update_test(req,res)	}    //测试编辑数据
-//function update(req,res) {	Update.update(req,res)	}    //正式编辑数据
 
-function add_student(req,res){	Add_Student.add_student_test(req,res);	}    //测试添加学生
-//function add_student(req,res){	Add_Student.add_student(req,res);	}    //正式添加学生
+function update(req,res) {	Update.update(req,res)	}    //正式编辑数据
+
+function add_student(req,res){	Add_Student.add_student(req,res);	}    //正式添加学生
 
 function login(req, res){	LOGIN.login(req,res);	}
 
@@ -61,34 +57,40 @@ function spaRender(req, res) {
 }
 
 function TokenAuth(req, res, next) {
-	 let token = req.body.token || req.query.token;
-	 console.log("token=" + token);
-	 jsonwebtoken.verify(token, KEY, (err, decodedInfo) => {
-		if(err == null) {
-			const username = decodedInfo.data.username;
-			client.get(username,(err, reply) => {  // 这是根据解析TOKEN获取的USERNAME获取的TOKEN
-				if (err){
-					console.log("logout faild!", err)
-					res.json({
-						code:constants.RetCode.REDIS_ERROR,
-					})
-				} else {
-					if(token === reply){
-						req.body.username = username
-					    next()
-					} else {
+	if(req.body.token===undefined){
+		res.json({
+			code: constants.RetCode.NULL_INFO_ERROR,
+		})
+	}else{
+		let token = req.body.token || req.query.token;
+		console.log("token=" + token);
+		jsonwebtoken.verify(token, KEY, (err, decodedInfo) => {
+			if(err == null) {
+				const username = decodedInfo.data.username;
+				client.get(username,(err, reply) => {  // 这是根据解析TOKEN获取的USERNAME获取的TOKEN
+					if (err){
+						console.log("logout faild!", err)
 						res.json({
-							code: constants.RetCode.NOT_FOUND_TOKEN,   //第二次注销失败
+							code:constants.RetCode.REDIS_ERROR,
 						})
+					} else {
+						if(token === reply){
+							req.body.username = username;
+							next()
+						} else {
+							res.json({
+								code: constants.RetCode.NOT_FOUND_TOKEN,   //第二次注销失败
+							})
+						}
 					}
-				}
-			});
-		} else {
-			res.json({
-				code: constants.RetCode.UNKNOWN_ERROR,
-			})
-		}
-	});
+				});
+			} else {
+				res.json({
+					code: constants.RetCode.UNKNOWN_ERROR,
+				})
+			}
+		});
+	}
 }
 
 module.exports = {
