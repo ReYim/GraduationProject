@@ -1,4 +1,4 @@
-import { login, logout, getInfo, add_student } from '@/api/user'
+import { login, logout, getInfo, add_student } from '@/api/admin'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 import Cookies from 'js-cookie'
@@ -54,12 +54,12 @@ const actions = {
     })
   },
 
-  // user add_student
+  // user add_student    userinfo 是传进来的参数data
   add_student({ commit }, userInfo) {
-    const { studentname, studentpass } = userInfo
+    const { studentname, studentpass, major, sex } = userInfo
     console.log('＋＋＋' + userInfo)
     return new Promise((resolve, reject) => {
-      add_student({ studentname: studentname.trim(), studentpass: studentpass, token: state.token}).then(response => {
+      add_student({ studentname: studentname.trim(), studentpass: studentpass, major: major, sex: sex, token: state.token}).then(response => {
         console.log('=-----' + response)
         const { data } = response
         commit('SET_TOKEN', data.token)

@@ -73,7 +73,7 @@ export const constantRoutes = [
       {
         path: 'table',
         name: 'Table',
-        component: () => import('@/views/table/index'),
+       // component: () => import('@/views/table/index'),
         meta: { title: '查询', icon: 'table' }
       },
       {
