@@ -1,17 +1,19 @@
 const constants = require('../../../common/constants');
-const User = require("../../models/user")
+const User = require("../../models/user");
 
-const Information = require("../../models/information")
+const Information = require("../../models/information");
 
 
 function add_student(req,res) {
+    let studentname ='' ;
+    let studentpass ='';
     if(req.body.studentname===undefined || req.body.studentpass===undefined){  //whether the variable is empty
         res.json({
             code : constants.RetCode.NULL_INFO_ERROR,
         })
     }else{
-        const studentname = req.body.studentname;
-        const studentpass = req.body.studentpass;
+         studentname = req.body.studentname;
+         studentpass = req.body.studentpass;
         if(studentname==="" || studentpass==="" ){
             res.json({
                 code:constants.RetCode.NULL_INFO_ERROR,
@@ -30,8 +32,9 @@ function add_student(req,res) {
                         weight: 3,
                     })
                         .then((admin, err) => {
+                            if(err) throw err;
                             console.log(admin.toJSON().id);
-                            const id = admin.toJSON().id
+                            const id = admin.toJSON().id;
                             Information.create({                        //创建用户学籍表
                                 username: studentname,
                                 userId: id,
@@ -69,24 +72,23 @@ function add_student(req,res) {
                                 .then(user => {
                                     res.json({
                                         code: constants.RetCode.SUCCESS,
-                                    })
-                                    console.log("add success!")
+                                    });
+                                    console.log(user.toJSON().username + "is  add success!")
                                 })
                         })
                         .catch(err => {
-                            console.log("err", err)
+                            console.log("err", err);
                             res.json({
                                 code: constants.RetCode.UNKNOWN_ERROR,
-                            })
-                        })
+                            });
+                        });
                 } else {  //如果存在就返回错误码
                     res.json({
                         code: constants.RetCode.USER_EXIST,
-                    })
+                    });
                 }
             })
         }
     }
 }
-module.exports.add_student_test = add_student_test;
 module.exports.add_student = add_student;

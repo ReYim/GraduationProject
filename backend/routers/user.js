@@ -6,8 +6,9 @@ const redis = require('redis')
 const jsonwebtoken = require('jsonwebtoken');
 const LOGIN =require('./login_logout/login')
 const LOGOUT =require('./login_logout/logout')
-const Add_Student = require('./add_del_student/add_student')
-const Update = require('./add_del_student/update')
+const Add_Student = require('./add_del_get_student/add_student')
+const Update = require('./add_del_get_student/update')
+const GetStudent = require('./add_del_get_student/get_student');
 
 //todo start redis client
 client=redis.createClient();
@@ -27,7 +28,8 @@ const AuthProtectRouter = express.Router({
 AuthProtectRouter.post("/add-student", add_student);  //handle login request
 AuthProtectRouter.post("/logout", logout);  //handle login request
 AuthProtectRouter.get("/info", getInfo);
-AuthProtectRouter.post("/update",update)
+AuthProtectRouter.post("/update",update);
+AuthProtectRouter.post("/get",GetStudent.get_student);
 
 
 function getInfo(req, res) {

@@ -8,6 +8,7 @@ const RetCode = {
 	NOT_FOUND_TOKEN: -1112 , //只能执行一次注销,
 	UNKNOWN_ERROR:-11112 ,   //TOKEN解析失败
 	USER_EXIST:1005,         //添加的用户已存在
+	USER_INEXISTENCE:1006,    //用户不存在
 }
 exports.RetCode = RetCode;
 
