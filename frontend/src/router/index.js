@@ -27,7 +27,9 @@ import Layout from '@/layout'
 
 /**
  * constantRoutes
- * a base page that does not have permission requirements
+ * 代表那些不需要动态判断权限的路由，如登录页、404、等通用页面
+ * asyncRoutes
+ * 代表那些需求动态判断权限并通过 addRoutes 动态添加的页面。
  * all roles can be accessed
  */
 export const constantRoutes = [
@@ -51,7 +53,7 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      meta: { title: '主页', icon: 'dashboard' }
     }]
   },
 
@@ -60,19 +62,25 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/example/table',
     name: 'Example',
-    meta: { title: 'Example', icon: 'example' },
+    meta: { title: '用户信息', icon: 'example' },
     children: [
+      {
+        path: 'users',
+        name: 'Users',
+        component: () => import('@/views/add-student/index'),
+        meta: { title: '添加', icon: 'form' }
+      },
       {
         path: 'table',
         name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
+       // component: () => import('@/views/table/index'),
+        meta: { title: '查询', icon: 'table' }
       },
       {
         path: 'tree',
         name: 'Tree',
         component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
+        meta: { title: '导出', icon: 'tree' }
       }
     ]
   },
@@ -85,7 +93,7 @@ export const constantRoutes = [
         path: 'index',
         name: 'Form',
         component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
+        meta: { title: '编辑信息', icon: 'form' }
       }
     ]
   },
@@ -96,7 +104,7 @@ export const constantRoutes = [
     redirect: '/nested/menu1',
     name: 'Nested',
     meta: {
-      title: 'Nested',
+      title: '待开发...',
       icon: 'nested'
     },
     children: [
@@ -154,12 +162,12 @@ export const constantRoutes = [
     children: [
       {
         path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
+        meta: { title: '待开发...', icon: 'link' }
       }
     ]
   },
 
-  // 404 page must be placed at the end !!!
+  // 404 page must be placed at the end !!! constantrouter时404必须在最后面
   { path: '*', redirect: '/404', hidden: true }
 ]
 

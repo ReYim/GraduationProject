@@ -12,7 +12,7 @@ const RetCode = {
 exports.RetCode = RetCode;
 
 const ROUTE_PATHS = {
-	USER: "/user",
+	USER: "/admin",
 	PAGE: "/page",
 	API : "/dev-api",
 	ADMIN:"/admin",
