@@ -2,7 +2,15 @@ import request from '@/utils/request'
 
 export function login(data) {
   return request({
-    url: '/user/login',
+    url: '/admin/login',
+    method: 'post',
+    data
+  })
+}
+
+export function add_student(data) {
+  return request({
+    url: '/admin/form',
     method: 'post',
     data
   })
@@ -10,15 +18,16 @@ export function login(data) {
 
 export function getInfo(token) {
   return request({
-    url: '/user/info',
+    url: '/admin/info',
     method: 'get',
     params: { token }
   })
 }
 
-export function logout() {
+export function logout(data) {
   return request({
-    url: '/user/logout',
-    method: 'post'
+    url: '/admin/logout',
+    method: 'post',
+    data
   })
 }
