@@ -76,9 +76,9 @@ export default [
     type: 'post',
     response: config => {
       const { code } = config.body
-      //const token = tokens[username]
+      // const token = tokens[username]
       return {
-        code: 1000,
+        code: code
       }
     }
   }
