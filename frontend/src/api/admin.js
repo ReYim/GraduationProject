@@ -2,23 +2,23 @@ import request from '@/utils/request'
 
 export function login(data) {
   return request({
-    url: '/user/login',
+    url: '/admin/login',
     method: 'post',
     data
   })
 }
 
-export function add_sdutent(token) {
+export function add_student(data) {
   return request({
-    url: '/user/add-student',
-    method: 'get',
-    params: { token }
+    url: '/admin/form',
+    method: 'post',
+    data
   })
 }
 
 export function getInfo(token) {
   return request({
-    url: '/user/info',
+    url: '/admin/info',
     method: 'get',
     params: { token }
   })
@@ -26,7 +26,7 @@ export function getInfo(token) {
 
 export function logout(data) {
   return request({
-    url: '/user/logout',
+    url: '/admin/logout',
     method: 'post',
     data
   })
