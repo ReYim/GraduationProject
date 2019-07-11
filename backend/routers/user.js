@@ -1,14 +1,16 @@
-const baseAbsPath = __dirname + '/';
+
 const express = require('express');
-const Promise = require('bluebird');
 const constants = require('../../common/constants');
 const User = require("../models/user")
 const Test = require("../models/test/test")
-const MySQLManager = require('../utils/MySQLManager');
-const jwt = require('../utils/jwt')
+const Information = require("../models/information/information")
 const KEY = require('../utils/common')
 const redis = require('redis')
-var jsonwebtoken = require('jsonwebtoken');
+const jsonwebtoken = require('jsonwebtoken');
+const LOGIN =require('./login_logout/login')
+const LOGOUT =require('./login_logout/logout')
+const Add_Student = require('./add_del_student/add_student')
+const Update = require('./add_del_student/update')
 
 //todo start redis client
 client=redis.createClient();
@@ -28,23 +30,8 @@ const AuthProtectRouter = express.Router({
 AuthProtectRouter.post("/add-student", add_student);  //handle login request
 AuthProtectRouter.post("/logout", logout);  //handle login request
 AuthProtectRouter.get("/info", getInfo);
+AuthProtectRouter.post("/update",update)
 
-function logout(req,res) {
-    let username = req.body.username;
-	client.del(username,(err)=>{    //这里要根据TOKEN注销用户，从REDIS删除
-		if(err){
-			console.log(err)
-			res.json({
-				code:constants.RetCode.REDIS_ERROR,
-			})
-		} else{
-			console.log("success!")
-			res.json({
-				code:constants.RetCode.SUCCESS,
-			})
-		}
-	})
-}
 
 function getInfo(req, res) {
 	res.json({
@@ -54,91 +41,16 @@ function getInfo(req, res) {
 	})
 }
 
-function add_student(req,res) {
-	console.log(req.body)
-	console.log("add_student reciev a request")
-	const username = req.body.username;
-	const password = req.body.password;
-	const token = req.body.token;
-	//TODO if receive null info  sent a code:NULL_INFO_ERROR, null, "", nonNumber, undefind
-	if(username==="" || password==="" || token===""){
-		res.json({
-			code:constants.RetCode.NULL_INFO_ERROR,
-		})
-	} else{
-		User.create({
-			username:username,
-			password:password,
-			weight: 3,
-		}).then((admin, err) => {
-			console.log(admin.toJSON().id);
-			    id = admin.toJSON().id
-				Test.create({
-					username:username,
-					userId: id,
-				}).then( user => {
-					res.json({
-						code: constants.RetCode.SUCCESS,
-					})
-					console.log("add success!")
-				})
-			})
-		.catch(err => {
-			console.log("err", err)
-		})
-	}
-}
 
-function login(req, res){
-	console.log(req.body)
-	const username = req.body.username;
-	const password = req.body.password;
+function update(req,res) {	Update.update_test(req,res)	}    //测试编辑数据
+//function update(req,res) {	Update.update(req,res)	}    //正式编辑数据
 
-	//TODO 判断前端发送的帐号号和密码是否为空
-	if(username==='' || password===''){
-		return res.json({
-             code:constants.RetCode.NULL_INFO_ERROR,
-		})
-	}
-	User.findOne({
-      where:{
-            username: username,
-        }
-	})
-	.then(user => {
-		//判断用户密码
-		if(user!= null && user.password == password) {
-			let userJson = user.toJSON()
-			jwt.setUserToken(username, user.weight)
-            .then(() => {
-				client.get(username, (err,reply)=>{
-					if(err){   //todo 如果从REDIS获取jwt失败就响应错误码
-						res.json({
-							code:constants.RetCode.REDIS_ERROR,
-						})
-					}
-					else{
-						res.json({
-							code: constants.RetCode.SUCCESS,
-							token: reply,
-						})
-					}
-				})
-            }).catch(err => {
-				console.log(err)
-				res.json({
-					code: -11111,
-				})
-			});
-		} else {
-			res.json({
-				code: constants.RetCode.PASSWORD_ERROR,
-			})
-		}
-	 });
-}
+function add_student(req,res){	Add_Student.add_student_test(req,res);	}    //测试添加学生
+//function add_student(req,res){	Add_Student.add_student(req,res);	}    //正式添加学生
 
+function login(req, res){	LOGIN.login(req,res);	}
 
+function logout(req,res) {	LOGOUT.logout(req,res);	}
 
 function spaRender(req, res) {
 	const xBundleUri = '/bin/player.zh_ch.bundle.js';

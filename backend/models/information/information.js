@@ -2,6 +2,7 @@ const Sequelize = require('sequelize');
 const MySQLManager = require('../../utils/MySQLManager');
 
 const Information = MySQLManager.define('information',{
+    userId: Sequelize.INTEGER,
     username: Sequelize.STRING,
     sex:      Sequelize.INTEGER, //0 boy 1 girl
     nation:   Sequelize.STRING,

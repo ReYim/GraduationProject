@@ -9,4 +9,5 @@ const Test = MySQLManager.define('test', {
 });
 
 
+
 module.exports = Test;
