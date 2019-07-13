@@ -3,7 +3,7 @@ const constants = require('../../../common/constants');
 const Information = require("../../models/information");
 const User =require("../../models/user");
 
-function get_student(req,res) {
+function getStudent(req,res) {
     if(req.body.userId === undefined){
         res.json({
             code: constants.RetCode.NULL_INFO_ERROR,
@@ -45,4 +45,4 @@ function get_student(req,res) {
     }
 }
 
-module.exports.get_student=get_student;
+module.exports.getStudent=getStudent;

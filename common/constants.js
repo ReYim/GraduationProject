@@ -9,6 +9,7 @@ const RetCode = {
 	UNKNOWN_ERROR:-11112 ,   //TOKEN解析失败
 	USER_EXIST:1005,         //添加的用户已存在
 	USER_INEXISTENCE:1006,    //用户不存在
+	SQL_ERROR:1007 ,         //数据库查询失败
 }
 exports.RetCode = RetCode;
 

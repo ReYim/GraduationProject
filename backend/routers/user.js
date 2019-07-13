@@ -4,11 +4,14 @@ const constants = require('../../common/constants');
 const KEY = require('../utils/common')
 const redis = require('redis')
 const jsonwebtoken = require('jsonwebtoken');
-const LOGIN =require('./login_logout/login')
-const LOGOUT =require('./login_logout/logout')
-const Add_Student = require('./add_del_get_student/add_student')
-const Update = require('./add_del_get_student/update')
-const GetStudent = require('./add_del_get_student/get_student');
+const login =require('./loginAndLogout/login')
+const logout =require('./loginAndLogout/logout')
+
+const addStudent = require('./adminOperation/addStudent')
+const updateStudent = require('./adminOperation/updateStudent')
+const getStudent = require('./adminOperation/getStudent');
+const getStudentList = require('./adminOperation/getStudentList');
+const delStudent = require('./adminOperation/delStudent');
 
 //todo start redis client
 client=redis.createClient();
@@ -25,11 +28,14 @@ PageRouter.get("/login", login);*/
 const AuthProtectRouter = express.Router({
 	mergeParams: true
 });
-AuthProtectRouter.post("/add-student", add_student);  //handle login request
-AuthProtectRouter.post("/logout", logout);  //handle login request
+AuthProtectRouter.post("/add-student", addStudent.add_student);
+AuthProtectRouter.post("/logout", logout.logout);
 AuthProtectRouter.get("/info", getInfo);
-AuthProtectRouter.post("/update",update);
-AuthProtectRouter.post("/get",GetStudent.get_student);
+AuthProtectRouter.post("/update",updateStudent.update);
+AuthProtectRouter.post("/get-one",getStudent.getStudent);
+AuthProtectRouter.post("/list",getStudentList.getStudentList);
+AuthProtectRouter.post("/del",delStudent.delStudent);
+
 
 
 function getInfo(req, res) {
@@ -41,15 +47,6 @@ function getInfo(req, res) {
 }
 
 
-
-function update(req,res) {	Update.update(req,res)	}    //正式编辑数据
-
-function add_student(req,res){	Add_Student.add_student(req,res);	}    //正式添加学生
-
-function login(req, res){	LOGIN.login(req,res);	}
-
-function logout(req,res) {	LOGOUT.logout(req,res);	}
-
 function spaRender(req, res) {
 	const xBundleUri = '/bin/player.zh_ch.bundle.js';
 	const paramDict = {
@@ -57,6 +54,7 @@ function spaRender(req, res) {
 	};
 	res.render('index', paramDict);
 }
+
 
 function TokenAuth(req, res, next) {
 	if(req.body.token===undefined){

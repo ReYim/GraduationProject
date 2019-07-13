@@ -1,8 +1,6 @@
 const constants = require('../../../common/constants');
 const Information = require("../../models/information");
 
-
-
 function update(req,res){
     if(req.body.userId===undefined  ){
         res.json({
@@ -50,13 +48,18 @@ function update(req,res){
                 userId: userId,
             }
         }).then((result)=>{
-            console.log("update result :");
-            console.log(result);
-            if(result===1){
+            if(result[0]===1 || result===1){
+                console.log("update success! ");
                 res.json({
                     code: constants.RetCode.SUCCESS,
                 })
-            }else{
+            }else if(result[0]===0 || result ===0){
+                console.log("from update : update SQL information failure !  the result is :"+result);
+                res.json({
+                    code: constants.RetCode.NOT_FOUND_TOKEN,
+                })
+            }else {
+                console.log("from update : this is the other error , i do not know what happen ! the result is :" +　result[0]);
                 res.json({
                     code: constants.RetCode.UNKNOWN_ERROR,
                 })

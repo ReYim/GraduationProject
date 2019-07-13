@@ -4,7 +4,7 @@ const constants = require(baseAbsPath + '../common/constants');
 const express = require('express');
 const app = express();
 const http = require('http').Server(app);
-const MySQLManager = require('./utils/MySQLManager');
+const login = require('./routers/loginAndLogout/login')
 
 const path = require('path');
 
@@ -32,9 +32,9 @@ const User = require('./routers/user');
 //TODO admin
 //登陆的路由
 app.use(constants.ROUTE_PATHS.API + constants.ROUTE_PATHS.ADMIN + '/login',
-	User.login);
+	login.login);
 //其它操作的路由，都需要验证token
-app.use(constants.ROUTE_PATHS.API + constants.ROUTE_PATHS.ADMIN,
+app.use(constants.ROUTE_PATHS.ADMIN + constants.ROUTE_PATHS.STUDENT,
 	User.TokenAuth,
 	User.AuthProtectRouter);
 

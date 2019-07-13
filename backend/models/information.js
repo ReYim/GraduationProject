@@ -34,6 +34,7 @@ const Information = MySQLManager.define('information',{
     wsjyy: Sequelize.STRING,
     zxztbx: Sequelize.STRING,
     jydw: Sequelize.STRING,
+    delete_at:Sequelize.STRING,
 
 });
 
