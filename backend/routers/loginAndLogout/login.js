@@ -15,10 +15,15 @@ function login(req, res){
         User.findOne({
             where:{
                 username: username,
+                delete_at:null,
             }
         })
             .then(user => {
-                if(user!= null && user.password === password) {    // is the user exist
+                if(user===null){
+                  res.json({
+                      code:constants.RetCode.USER_INEXISTENCE,
+                  });
+                } else if(user!= null && user.password === password) {    // is the user exist
                     jwt.setUserToken(username, user.weight)
                         .then(() => {
                             redis.createClient().get(username, (err,reply)=>{

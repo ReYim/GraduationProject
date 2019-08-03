@@ -10,6 +10,7 @@ const RetCode = {
 	USER_EXIST:1005,         //添加的用户已存在
 	USER_INEXISTENCE:1006,    //用户不存在
 	SQL_ERROR:1007 ,         //数据库查询失败
+	ERROR_USERID:1008 ,      //数据库里没有这个用户
 }
 exports.RetCode = RetCode;
 
