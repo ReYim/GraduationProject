@@ -3,7 +3,7 @@
 #
 *.swp
 *.sw*
-
+/backend/node_modules
 # Xcode
 #
 build/

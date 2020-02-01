@@ -6,24 +6,24 @@ const config = require('../configs/mysql.conf.json');
 let MySQLManager = connectToMysql();
 
 function connectToMysql() {
-	let host = config.host;
-	let port = config.port;
-	let dbname = config.dbname;
-	let username = config.username;
-	let password = config.password;
+	let host = '182.92.157.186';
+	let port = '3306';
+	let dbname = 'mardan';
+	let username = 'root';
+	let password = '123456';
 
 	try {
 		let dbRef = new Sequelize(dbname, username, password, {
 			host: host,
 			port: port,
 			dialect: 'mysql',
-			pool: {
-				max: 5,
-				min: 0,
-				idle: 10000
-			}
+			// pool: {
+			// 	max: 5,
+			// 	min: 0,
+			// 	idle: 10000
+			// }
 		});
-		console.log("connect mysql success");
+		// console.log("connect mysql success");
 		//初始化数据表
 		dbRef.sync()
 		return dbRef
