@@ -27,7 +27,7 @@ project.xcworkspace
 # Android/IJ
 #
 *.iml
-.idea
+.idea 
 .idea/*
 android/local.properties
 android/build
